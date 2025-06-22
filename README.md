@@ -112,9 +112,9 @@ streamlit run app.py
 
 ## 🚄 Caching & Performance
 
-- `` is used for PDF extraction and splitting — avoids reprocessing the same files.
-- `` caches the FAISS vector store for quick rebuilds.
-- **Adjust chunk size** in `extract_and_split` to optimize retrieval speed vs. accuracy.
+- `extract_and_split` is used for PDF extraction and splitting — avoids reprocessing the same files.
+  - Optional: Adjust chunk size in `extract_and_split` to optimize retrieval speed vs. accuracy.
+- `get_vector_store` caches the FAISS vector store for quick rebuilds.
 
 ## 🤝 Contributing
 
