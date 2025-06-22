@@ -9,11 +9,18 @@ from langchain_openai import OpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain.callbacks import get_openai_callback
 from langchain.chains.question_answering import load_qa_chain
+import os, tempfile
 
 def main():
+    # 1. Check for OpenAI API key in environment
+    if "OPENAI_API_KEY" not in os.environ:
+      st.error("Missing environment variable: OPENAI_API_KEY. Please set it before running the app.")
+      st.stop()
+      
+    # 2. Set up Streamlit app
     load_dotenv()
-    st.set_page_config(page_title="Ask your PDF")
-    st.header("Ask your PDF 💬")
+    st.set_page_config(page_title="Ask your PDFs", layout="wide")
+    st.header("📄💬 Upload PDFs and Ask Questions")
     
     # upload file
     pdf = st.file_uploader("Upload your PDF", type="pdf")
@@ -43,8 +50,15 @@ def main():
       if user_question:
         docs = knowledge_base.similarity_search(user_question)
         
-        llm = OpenAI()
+        llm = OpenAI(
+          model="gpt-4o-mini",
+          temperature=0.2,
+          max_tokens=1000,
+          top_p=1,
+        )
+        
         chain = load_qa_chain(llm, chain_type="stuff")
+
         with get_openai_callback() as cb:
           response = chain.run(input_documents=docs, question=user_question)
           print(cb)
