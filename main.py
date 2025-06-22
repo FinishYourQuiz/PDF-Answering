@@ -22,15 +22,20 @@ def main():
     st.set_page_config(page_title="Ask your PDFs", layout="wide")
     st.header("📄💬 Upload PDFs and Ask Questions")
     
-    # upload file
-    pdf = st.file_uploader("Upload your PDF", type="pdf")
-    
+    # 3. Allow multiple PDF uploads
+    uploads = st.file_uploader(
+      label="Upload one or more PDF files", type="pdf",
+      accept_multiple_files=True
+    )
+    question = st.text_input("Ask a question about the uploaded PDFs:")
     # extract the text
-    if pdf is not None:
-      pdf_reader = PdfReader(pdf)
-      text = ""
-      for page in pdf_reader.pages:
-        text += page.extract_text()
+    if uploads is not None:
+      pdf_texts = []
+      for pdf in uploads:
+          pdf_reader = PdfReader(pdf)
+          text = ""
+          for page in pdf_reader.pages:
+      text += page.extract_text()
         
       # split into chunks
       text_splitter = CharacterTextSplitter(
