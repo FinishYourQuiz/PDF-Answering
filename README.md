@@ -47,8 +47,8 @@ The **PDF Q&A Demo** is a lightweight Streamlit application that allows users to
 1. **Clone this repository**
 
    ```bash
-   git clone https://github.com/yourusername/pdf-qa-demo.git
-   cd pdf-qa-demo
+   git clone https://github.com/FinishYourQuiz/PDF-Question-Answering.git
+   cd PDF-Question-Answering
    ```
 
 2. **Set up a virtual environment**
