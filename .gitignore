@@ -10,3 +10,4 @@ _site/
 
 # Additional Ruby/bundler ignore for when you run: bundle install
  
+.env
