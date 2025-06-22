@@ -28,14 +28,17 @@ def main():
       accept_multiple_files=True
     )
     question = st.text_input("Ask a question about the uploaded PDFs:")
+    
     # extract the text
-    if uploads is not None:
-      pdf_texts = []
-      for pdf in uploads:
-          pdf_reader = PdfReader(pdf)
-          text = ""
-          for page in pdf_reader.pages:
-      text += page.extract_text()
+    if uploads and question:
+      pdf_texts = [] 
+      for uploaded in uploads:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+          tmp.write(uploaded.read())
+          path = tmp.name 
+          loader = PdfReader(path) 
+        docs = loader.load()
+        pdf_texts.append(docs)
         
       # split into chunks
       text_splitter = CharacterTextSplitter(
