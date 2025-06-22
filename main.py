@@ -13,12 +13,12 @@ import os, tempfile
 
 def main():
     # 1. Check for OpenAI API key in environment
+    load_dotenv()
     if "OPENAI_API_KEY" not in os.environ:
       st.error("Missing environment variable: OPENAI_API_KEY. Please set it before running the app.")
       st.stop()
       
     # 2. Set up Streamlit app
-    load_dotenv()
     st.set_page_config(page_title="Ask your PDFs", layout="wide")
     st.header("📄💬 Upload PDFs and Ask Questions")
     
@@ -27,19 +27,21 @@ def main():
       label="Upload one or more PDF files", type="pdf",
       accept_multiple_files=True
     )
-    question = st.text_input("Ask a question about the uploaded PDFs:")
     
     # extract the text
-    if uploads and question:
-      pdf_texts = [] 
+    if uploads:
+      # pdf_texts = [] 
+      text = ""
       for uploaded in uploads:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
           tmp.write(uploaded.read())
           path = tmp.name 
           loader = PdfReader(path) 
-        docs = loader.load()
-        pdf_texts.append(docs)
-        
+          for page in loader.pages:
+            if page.extract_text():
+              # pdf_texts.append(page.extract_text())
+              text += page.extract_text() + "\n"
+
       # split into chunks
       text_splitter = CharacterTextSplitter(
         separator="\n",
